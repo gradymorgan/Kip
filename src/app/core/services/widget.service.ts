@@ -136,6 +136,14 @@ export class WidgetService {
       componentClassName: 'WidgetDataChartComponent'
     },
     {
+      name: 'Vertical Graph',
+      description: 'A vertical graph visualization that displays data in a top-down historical format, similar to those found on advanced marine instruments. The display shows the current value at the top with historical data flowing downward.',
+      icon: 'datachartWidget',
+      category: 'Components',
+      selector: 'widget-vertical-graph',
+      componentClassName: 'WidgetVerticalGraphComponent'
+    },
+    {
       name: 'Autopilot Head',
       description: 'An Autopilot Head for supported Signal K autopilot devices.',
       icon: 'autopilotWidget',
