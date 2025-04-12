@@ -6,7 +6,9 @@ import { IWidgetSvcConfig } from '../../core/interfaces/widgets-interface';
 import { DatasetService, IDatasetServiceDatapoint, IDatasetServiceDataSourceInfo } from '../../core/services/data-set.service';
 import { Subscription } from 'rxjs';
 import { Chart, ChartConfiguration, ChartData, ChartType } from 'chart.js';
+import annotationPlugin from 'chartjs-plugin-annotation';
 import 'chartjs-adapter-date-fns';
+import ChartStreaming from '@robloche/chartjs-plugin-streaming';
 
 interface IGraphColors {
     valueLine: string,
@@ -85,6 +87,7 @@ export class WidgetVerticalGraphComponent extends BaseWidgetComponent implements
       this.setChartOptions();
 
       this.chart?.destroy();
+      Chart.register(annotationPlugin, ChartStreaming);
       this.chart = new Chart(this.widgetVerticalGraph().nativeElement.getContext('2d'), {
         type: this.lineChartType,
         data: this.lineChartData,
@@ -256,20 +259,9 @@ export class WidgetVerticalGraphComponent extends BaseWidgetComponent implements
         label = "%";
         break;
 
-      case "latitudeMin":
-        label = "latitude in minutes";
-        break;
-
-      case "latitudeSec":
-        label = "latitude in secondes";
-        break;
-
-      case "longitudeMin":
-        label = "longitude in minutes";
-        break;
-
-      case "longitudeSec":
-        label = "longitude in secondes";
+      case "rad":
+      case "deg":
+        label = "°";
         break;
 
       default:
