@@ -5,7 +5,7 @@ import { WidgetHostComponent } from '../../core/components/widget-host/widget-ho
 import { IWidgetSvcConfig } from '../../core/interfaces/widgets-interface';
 import { DatasetService, IDatasetServiceDatapoint, IDatasetServiceDataSourceInfo } from '../../core/services/data-set.service';
 import { Subscription } from 'rxjs';
-import { Chart, ChartConfiguration, ChartData, ChartType } from 'chart.js';
+import { Chart, ChartConfiguration, ChartData, ChartType, TimeUnit } from 'chart.js';
 import annotationPlugin from 'chartjs-plugin-annotation';
 import 'chartjs-adapter-date-fns';
 import ChartStreaming from '@robloche/chartjs-plugin-streaming';
@@ -129,7 +129,7 @@ export class WidgetVerticalGraphComponent extends BaseWidgetComponent implements
         type: "realtime",
         display: false,
         time: {
-          unit: this.datasetConfig.timeScaleFormat,
+          unit: this.datasetConfig.timeScaleFormat as TimeUnit,
           minUnit: "second",
           round: "second"
         },
@@ -179,6 +179,9 @@ export class WidgetVerticalGraphComponent extends BaseWidgetComponent implements
         display: false
       }
     }
+
+    // Add background color to the chart
+    this.lineChartOptions.backgroundColor = this.theme.background;
   }
 
   private getThemeColors(): IGraphColors {
