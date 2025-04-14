@@ -55,7 +55,8 @@ export class WidgetVerticalDataChartComponent extends BaseWidgetComponent implem
       tension: {
         easing: "easeInOutCubic"
       }
-    }
+    },
+    indexAxis: 'y' // Set indexAxis to 'y' for horizontal bars/lines
   }
   public lineChartType: ChartType = 'line';
   private chart;
@@ -132,6 +133,7 @@ export class WidgetVerticalDataChartComponent extends BaseWidgetComponent implem
   private setChartOptions() {
     this.lineChartOptions.maintainAspectRatio = false;
     this.lineChartOptions.animation = false;
+    this.lineChartOptions.indexAxis = 'y'; // Ensure y-axis is the main axis (horizontal chart)
 
     this.lineChartData.datasets = [];
     this.lineChartData.datasets.push(
@@ -168,8 +170,9 @@ export class WidgetVerticalDataChartComponent extends BaseWidgetComponent implem
       }
     );
 
+    // Swap x and y axis configurations to have time on y-axis and data on x-axis
     this.lineChartOptions.scales = {
-      x: {
+      y: { // This is now the time axis (was x before)
         type: "realtime",
         display: this.widgetProperties.config.showTimeScale,
         title: {
@@ -198,11 +201,12 @@ export class WidgetVerticalDataChartComponent extends BaseWidgetComponent implem
         grid: {
           display: true,
           color: this.theme.contrastDimmer
-        }
+        },
+        position: "left"
       },
-      y: {
+      x: { // This is now the data axis (was y before)
         display: this.widgetProperties.config.showYScale,
-        position: "right",
+        position: "bottom",
         suggestedMin: this.widgetProperties.config.enableMinMaxScaleLimit ? null : this.widgetProperties.config.yScaleSuggestedMin,
         suggestedMax: this.widgetProperties.config.enableMinMaxScaleLimit ? null : this.widgetProperties.config.yScaleSuggestedMax,
         min: this.widgetProperties.config.enableMinMaxScaleLimit ? this.widgetProperties.config.yScaleMin : null,
@@ -260,7 +264,7 @@ export class WidgetVerticalDataChartComponent extends BaseWidgetComponent implem
         annotations: {
           minimumLine: {
             type: 'line',
-            scaleID: 'y',
+            scaleID: 'x', // Changed from 'y' to 'x' since value is now on x-axis
             display: this.widgetProperties.config.showDatasetMinimumValueLine,
             value: null,
             drawTime: 'afterDatasetsDraw',
@@ -275,7 +279,7 @@ export class WidgetVerticalDataChartComponent extends BaseWidgetComponent implem
           },
           maximumLine: {
             type: 'line',
-            scaleID: 'y',
+            scaleID: 'x', // Changed from 'y' to 'x'
             display: this.widgetProperties.config.showDatasetMaximumValueLine,
             value: null,
             drawTime: 'afterDatasetsDraw',
@@ -290,7 +294,7 @@ export class WidgetVerticalDataChartComponent extends BaseWidgetComponent implem
           },
           averageLine: {
             type: 'line',
-            scaleID: 'y',
+            scaleID: 'x', // Changed from 'y' to 'x'
             display: this.widgetProperties.config.showDatasetAverageValueLine,
             value: null,
             borderDash: [6, 6],
@@ -548,26 +552,27 @@ export class WidgetVerticalDataChartComponent extends BaseWidgetComponent implem
   }
 
   private transformDatasetRow(row: IDatasetServiceDatapoint, datasetType): IDataSetRow  {
-    const newRow: IDataSetRow = {x: row.timestamp, y: null};
+    // Swap x and y to have value on x-axis and timestamp on y-axis
+    const newRow: IDataSetRow = {y: row.timestamp, x: null};
 
     // Check if its a value or an average row
     if (datasetType === 0) {
-      newRow.y = this.unitsService.convertToUnit(this.widgetProperties.config.convertUnitTo, row.data.value);
+      newRow.x = this.unitsService.convertToUnit(this.widgetProperties.config.convertUnitTo, row.data.value);
     } else {
       switch (this.widgetProperties.config.datasetAverageArray) {
         case "sma":
-          newRow.y = this.unitsService.convertToUnit(this.widgetProperties.config.convertUnitTo, row.data.sma);
+          newRow.x = this.unitsService.convertToUnit(this.widgetProperties.config.convertUnitTo, row.data.sma);
           break;
         case "ema":
-          newRow.y = this.unitsService.convertToUnit(this.widgetProperties.config.convertUnitTo, row.data.ema);
+          newRow.x = this.unitsService.convertToUnit(this.widgetProperties.config.convertUnitTo, row.data.ema);
           break;
 
         case "dema":
-          newRow.y = this.unitsService.convertToUnit(this.widgetProperties.config.convertUnitTo, row.data.doubleEma);
+          newRow.x = this.unitsService.convertToUnit(this.widgetProperties.config.convertUnitTo, row.data.doubleEma);
           break;
 
         case "avg":
-          newRow.y = this.unitsService.convertToUnit(this.widgetProperties.config.convertUnitTo, row.data.lastAverage);
+          newRow.x = this.unitsService.convertToUnit(this.widgetProperties.config.convertUnitTo, row.data.lastAverage);
           break;
       }
     }
