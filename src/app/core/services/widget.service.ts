@@ -136,6 +136,14 @@ export class WidgetService {
       componentClassName: 'WidgetDataChartComponent'
     },
     {
+      name: 'Vertical Data Chart',
+      description: 'Visualize data on a vertical realtime chart with multiple series pre configured such as averages, SMA, EMA and DEMA. The use the Vertical Data Chart widget KIP Dataset must be configured.',
+      icon: 'datachartWidget',
+      category: 'Components',
+      selector: 'widget-vertical-data-chart',
+      componentClassName: 'WidgetVerticalDataChartComponent'
+    },
+    {
       name: 'Autopilot Head',
       description: 'An Autopilot Head for supported Signal K autopilot devices.',
       icon: 'autopilotWidget',

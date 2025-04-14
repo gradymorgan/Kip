@@ -19,6 +19,7 @@ import { WidgetDatetimeComponent } from '../../../widgets/widget-datetime/widget
 import { WidgetBooleanSwitchComponent } from '../../../widgets/widget-boolean-switch/widget-boolean-switch.component';
 import { WidgetAutopilotComponent } from '../../../widgets/widget-autopilot/widget-autopilot.component';
 import { WidgetDataChartComponent } from '../../../widgets/widget-data-chart/widget-data-chart.component';
+import { WidgetVerticalDataChartComponent } from '../../../widgets/widget-vertical-data-chart/widget-vertical-data-chart.component';
 import { WidgetFreeboardskComponent } from '../../../widgets/widget-freeboardsk/widget-freeboardsk.component';
 import { WidgetGaugeNgCompassComponent } from '../../../widgets/widget-gauge-ng-compass/widget-gauge-ng-compass.component';
 import { WidgetGaugeNgLinearComponent } from '../../../widgets/widget-gauge-ng-linear/widget-gauge-ng-linear.component';
@@ -75,6 +76,7 @@ export class DashboardComponent implements AfterViewInit, OnDestroy{
       WidgetFreeboardskComponent,
       WidgetAutopilotComponent,
       WidgetDataChartComponent,
+      WidgetVerticalDataChartComponent,
       WidgetRaceTimerComponent,
       WidgetIframeComponent,
       WidgetTutorialComponent,
