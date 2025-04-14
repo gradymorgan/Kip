@@ -31,7 +31,6 @@ import { WidgetSimpleLinearComponent } from '../../../widgets/widget-simple-line
 import { WidgetTutorialComponent } from '../../../widgets/widget-tutorial/widget-tutorial.component';
 import { WidgetWindComponent } from '../../../widgets/widget-wind/widget-wind.component';
 import { WidgetLabelComponent } from '../../../widgets/widget-label/widget-label.component';
-import { WidgetVerticalDataChartComponent } from '../../../widgets/widget-vertical-data-chart/widget-vertical-data-chart.component';
 import { uiEventService } from '../../services/uiEvent.service';
 
 
@@ -81,8 +80,7 @@ export class DashboardComponent implements AfterViewInit, OnDestroy{
       WidgetTutorialComponent,
       WidgetWindComponent,
       WidgetPositionComponent,
-      WidgetLabelComponent,
-      WidgetVerticalDataChartComponent
+      WidgetLabelComponent
     ]);
 
     effect(() => {

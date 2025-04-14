@@ -156,7 +156,6 @@
   "cli": {
     "warnings": {
       "versionMismatch": true
-    },
-    "analytics": false
+    }
   }
 }
