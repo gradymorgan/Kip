@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, signal, viewChild, inject, EventEmitter, AfterViewInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, signal, viewChild, inject, EventEmitter, AfterViewInit, effect } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { AuthenticationService } from './core/services/authentication.service';
 import { AppSettingsService } from './core/services/app-settings.service';
@@ -15,6 +15,7 @@ import { MatSidenav, MatSidenavModule } from '@angular/material/sidenav';
 import { MenuActionsComponent } from './core/components/menu-actions/menu-actions.component';
 import { DashboardService } from './core/services/dashboard.service';
 import { uiEventService } from './core/services/uiEvent.service';
+import { DialogService } from './core/services/dialog.service';
 
 
 @Component({
@@ -30,12 +31,13 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   private _app = inject(AppService);
   private _dashboard = inject(DashboardService);
   private _uiEvent = inject(uiEventService);
+  private _dialog = inject(DialogService);
   public appSettingsService = inject(AppSettingsService);
   public authenticationService = inject(AuthenticationService);
   public openSidenavEvent: EventEmitter<void> = new EventEmitter<void>();
 
   protected actionsSidenav = viewChild<MatSidenav>('actionsSidenav');
-  protected actionsSidenavOpen = false;
+  protected actionsSidenavOpen = signal<boolean>(false);
   protected notificationsSidenavOpened = signal<boolean>(false);
   protected notificationsVisibility: string = 'hidden';
 
@@ -44,6 +46,20 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   private themeNameSub: Subscription;
   private appNotificationSub: Subscription;
   private connectionStatusSub: Subscription;
+
+  constructor() {
+    effect(() => {
+      if (this.appSettingsService.configUpgrade()) {
+        this._dialog.openFrameDialog({
+          title: 'Configuration Upgrade',
+          component: 'upgrade-config',
+        }, true).subscribe(data => {
+          if (!data) {return} //clicked cancel
+
+        });
+      }
+    });
+  }
 
   ngOnInit() {
     // Connection Status Notification sub
@@ -94,24 +110,17 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit(): void {
-    // Add keyboard shortcut listener
-    this._uiEvent.addHotkeyListener(this.handleKeyDown.bind(this));
+    this._uiEvent.addHotkeyListener(
+      (key, event) => this.handleKeyDown(key, event),
+      { ctrlKey: true, keys: ['arrowright', 'arrowleft'] } // Filter for arrow keys with Ctrl
+    );
   }
 
-  private handleKeyDown(event: KeyboardEvent): void {
-    // Avoid executing shortcuts when an input field is focused
-    if (['INPUT', 'TEXTAREA', 'MAT-SELECT'].includes(document.activeElement.tagName)) return;
-    if (event.ctrlKey && event.ctrlKey) {
-      switch (event.key) {
-        case 'ArrowRight':
-          this.onSwipeRight(event);
-          break;
-        case 'ArrowLeft':
-          this.onSwipeLeft(event);
-          break;
-        default:
-          break;
-      }
+  private handleKeyDown(key: string, event: KeyboardEvent): void {
+    if (key === 'arrowright') {
+      this.onSwipeRight(event);
+    } else if (key === 'arrowleft') {
+      this.onSwipeLeft(event);
     }
   }
 
@@ -149,7 +158,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   protected onSwipeLeft(e: Event): void {
     if (this._dashboard.isDashboardStatic() && !this._uiEvent.isDragging()) {
       e.preventDefault();
-      this.actionsSidenavOpen = true;
+      this.actionsSidenavOpen.set(true);
     }
   }
 
