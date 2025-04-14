@@ -109,6 +109,11 @@ export class AppNetworkInitService implements OnDestroy {
       this.setLocalStorageConfig();
       console.log(`[AppInit Network Service] Upgrading Connection version from 9 to 10`);
     }
+    if (this.config.configVersion == 10) {
+      this.config.configVersion = 11;
+      this.setLocalStorageConfig();
+      console.log(`[AppInit Network Service] Upgrading Connection version from 10 to 11`);
+    }
   }
 
   private preloadFonts (): void {
@@ -116,7 +121,7 @@ export class AppNetworkInitService implements OnDestroy {
     const fonts = [
       {
         family: "Roboto",
-        src: "url(/assets/google-fonts/KFOlCnqEu92Fr1MmSU5fChc4AMP6lbBP.woff2)",
+        src: "url(./assets/google-fonts/KFOlCnqEu92Fr1MmSU5fChc4AMP6lbBP.woff2)",
         options: {
           weight: "300",
           style: "normal"
@@ -124,7 +129,7 @@ export class AppNetworkInitService implements OnDestroy {
       },
       {
         family: "Roboto",
-        src: "url(/assets/google-fonts/KFOlCnqEu92Fr1MmSU5fBBc4AMP6lQ.woff2)",
+        src: "url(./assets/google-fonts/KFOlCnqEu92Fr1MmSU5fBBc4AMP6lQ.woff2)",
         options: {
           weight: "300",
           style: "normal"
@@ -132,7 +137,7 @@ export class AppNetworkInitService implements OnDestroy {
       },
       {
         family: "Roboto",
-        src: "url(/assets/google-fonts/KFOmCnqEu92Fr1Mu7GxKKTU1Kvnz.woff2)",
+        src: "url(./assets/google-fonts/KFOmCnqEu92Fr1Mu7GxKKTU1Kvnz.woff2)",
         options: {
           weight: "400",
           style: "normal"
@@ -140,7 +145,7 @@ export class AppNetworkInitService implements OnDestroy {
       },
       {
         family: "Roboto",
-        src: "url(/assets/google-fonts/KFOmCnqEu92Fr1Mu4mxKKTU1Kg.woff2)",
+        src: "url(./assets/google-fonts/KFOmCnqEu92Fr1Mu4mxKKTU1Kg.woff2)",
         options: {
           weight: "400",
           style: "normal"
@@ -148,7 +153,7 @@ export class AppNetworkInitService implements OnDestroy {
       },
     {
         family: "Roboto",
-        src: "url(/assets/google-fonts/KFOlCnqEu92Fr1MmEU9fChc4AMP6lbBP.woff2)",
+        src: "url(./assets/google-fonts/KFOlCnqEu92Fr1MmEU9fChc4AMP6lbBP.woff2)",
         options: {
           weight: "500",
           style: "normal"
@@ -156,7 +161,7 @@ export class AppNetworkInitService implements OnDestroy {
       },
       {
         family: "Roboto",
-        src: "url(/assets/google-fonts/KFOlCnqEu92Fr1MmEU9fBBc4AMP6lQ.woff2)",
+        src: "url(./assets/google-fonts/KFOlCnqEu92Fr1MmEU9fBBc4AMP6lQ.woff2)",
         options: {
           weight: "500",
           style: "normal"
@@ -167,8 +172,12 @@ export class AppNetworkInitService implements OnDestroy {
     for (const {family, src, options} of fonts) {
       const font = new FontFace(family, src, options);
       font.load()
-        .then(() => document.fonts.add(font))
-        .catch(err => console.log(`[AppInit Network Service] Error loading fonts: ${err}`));
+        .then(() =>
+          document.fonts.add(font)
+      )
+        .catch(err =>
+          console.log(`[AppInit Network Service] Error loading fonts: ${err}`)
+        );
     }
   }
 
